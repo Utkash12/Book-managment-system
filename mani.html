@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMS</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: black;
+            margin: 10px;
+            padding: 40px;
+        }
+        h1 {
+            text-align: center;
+            color: yellow;
+        }
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 6px 8px 8px grey;
+        }
+        label, input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 4px 10px 4px;
+            font-size: 16px;
+            border-radius: 15px;
+            border: 1px solid green;
+        }
+        label{
+            align-items: center;
+        }
+        button {
+            background-color: orange;
+            color: white;
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: blue;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            margin: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: green;
+            color: white;
+        }
+        td {
+            background-color: pink;
+        }
+        .action-btn {
+            cursor: pointer;
+            color: white;
+            background-color: red;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .action-btn.update {
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Book Management System</h1>
+        <form id="bookForm">
+            <label for="title">Title</label>
+            <input type="text" id="title" placeholder="Enter book title" required>
+
+            <label for="author">Author</label>
+            <input type="text" id="author" placeholder="Enter author name" required>
+
+            <label for="isbn">ISBN</label>
+            <input type="text" id="isbn" placeholder="Enter ISBN" required>
+
+            <label for="publication-date">Publication Date</label>
+            <input type="date" id="publication-date" required>
+
+            <label for="genre">Genre</label>
+            <select id="genre" required>
+                <option value="fiction">Fiction</option>
+                <option value="non-fiction">Non-fiction</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="science-fiction">Science Fiction</option>
+                <option value="biography">Biography</option>
+                <option value="mystery">Mystery</option>
+                <option value="romance">Romance</option>
+                <option value="thriller">Thriller</option>
+                <option value="historical">Historical</option>
+            </select>
+
+            <button type="button" id="submitBtn">Add Book</button>
+        </form>
+
+    
+        <table id="booksTable">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Publication Date</th>
+                    <th>Genre</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let books = []; 
+        let editIndex = -1; 
+
+        const renderTable = () => {
+            const tableBody = document.getElementById('booksTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; 
+
+            books.forEach((book, index) => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.isbn}</td>
+                    <td>${book.publicationDate}</td>
+                    <td>${book.genre}</td>
+                    <td>
+                        <button class="action-btn update" onclick="editBook(${index})">Update</button>
+                        <button class="action-btn" onclick="deleteBook(${index})">Delete</button>
+                    </td>
+                `;
+            });
+        };
+        const submitForm = () => {
+            const title = document.getElementById('title').value;
+            const author = document.getElementById('author').value;
+            const isbn = document.getElementById('isbn').value;
+            const publicationDate = document.getElementById('publication-date').value;
+            const genre = document.getElementById('genre').value;
+
+            const book = { title, author, isbn, publicationDate, genre };
+
+            if (editIndex === -1) {
+                books.push(book);
+            } else {
+                books[editIndex] = book;
+                editIndex = -1;
+                document.getElementById('submitBtn').textContent = 'Add Book';
+            }
+            document.getElementById('bookForm').reset();
+            renderTable();
+        };
+
+        const editBook = (index) => {
+            const book = books[index];
+            document.getElementById('title').value = book.title;
+            document.getElementById('author').value = book.author;
+            document.getElementById('isbn').value = book.isbn;
+            document.getElementById('publication-date').value = book.publicationDate;
+            document.getElementById('genre').value = book.genre;
+
+            editIndex = index;
+            document.getElementById('submitBtn').textContent = 'Update Book';
+        };
+
+        const deleteBook = (index) => {
+            books.splice(index, 1);
+            renderTable();
+        };
+
+        
+        document.getElementById('submitBtn').addEventListener('click', submitForm);
+
+        
+        renderTable();
+    </script>
+
+</body>
+</html>

@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book</title>
+    <title>BMS</title>
     <style>
         body {
-            font-style: Arial;
+            font-family: Arial, sans-serif;
             background-color: pink;
-            margin: 20;
+            margin: 0;
             padding: 40px;
+            position: relative; /* Ensure the container is relative for absolute positioning */
         }
         .container {
             max-width: 600px;
             margin: auto;
             background-color: white;
-            padding: 20px 20px 20px 20px;
+            padding: 20px;
             border-radius: 50px;
             box-shadow: 1px 4px 8px black;
         }
@@ -26,23 +27,23 @@
         label {
             display: block;
             text-align: center;
-            font-style: Arial;
+            font-family: Arial;
             margin: 10px 2px 2px 5px;
             font-weight: bold;
         }
         input, select {
             width: 100%;
-            padding: 8px 8px;
-            margin: 5px 5px;
+            padding: 8px;
+            margin: 5px;
             box-shadow: 4px 4px 4px;
             border: 1px solid green;
             border-radius: 20px;
-            outline:none;
+            outline: none;
         }
         button {
             background-color: orange;
             color: white;
-            padding: 20px 20px;
+            padding: 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -53,12 +54,30 @@
         button:hover {
             background-color: yellow;
         }
+
+        /* Styling for the anchor link at top-right */
+        a {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: orange;
+            color: white;
+            padding: 20px 40px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        a:hover {
+            background-color: yellow;
+        }
     </style>
 </head>
 <body>
+    <a href="manii.html">Book Manipulation</a>
     <div class="container">
         <h1>Adding a Book at Sourcefuse Library</h1>
-        <form action="/submit" method="POST">
+        <form action="/submit" method="POST" onsubmit="return validateForm()">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" placeholder="book" required>
 
@@ -80,12 +99,33 @@
                 <option value="biography">Biography</option>
                 <option value="mystery">Mystery</option>
                 <option value="romance">Romance</option>
-                <option value="thriller">Thriller</option>
+                <option value="thriller">Thriller</option>  
                 <option value="historical">Historical</option>
             </select>
 
-            <button type="submit" onclick="alert('form submitted')">Add Book</button>
+            <button type="submit">Add Book</button>
         </form>
     </div>
+
+    <script>
+        const validateForm = () => {
+            const title = document.getElementById("title").value;
+            const author = document.getElementById("author").value;
+            const isbn = document.getElementById("isbn").value;
+            const publicationDate = document.getElementById("publication-date").value;
+            const genre = document.getElementById("genre").value;
+
+            if (!title || !author || !isbn || !publicationDate || !genre) {
+                alert("All fields must be filled out");
+                return false;
+            }
+
+            if (isNaN(isbn)) {
+                alert("ISBN should be a number");
+                return false;
+            }
+            return true;
+        };
+    </script>
 </body>
 </html>
